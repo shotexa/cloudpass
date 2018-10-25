@@ -67,7 +67,7 @@
         "brace-style": 2,
         "callback-return": 2,
         "camelcase": 2,
-        "capitalized-comments": 2,
+        "capitalized-comments": 0,
         "no-return-await": 2,
         "accessor-pairs": 2,
         "array-bracket-spacing": 2,
