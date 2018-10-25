@@ -3,8 +3,10 @@
 P2P file sharing software written in nodeJs
 
 ### Run locally
-you will need [Vagrant]() and [VirtualBox]() installed on your machine
+you will need [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed on your machine
+
 run ```vagrant up``` from terminal
+
 2 machines will be initialized
 ```sh
 machine_1 10.0.0.2
