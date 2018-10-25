@@ -13,6 +13,7 @@ machine_1 10.0.0.2
 machine_2 10.0.0.3
 ```
 In terminal
+
 ```vagrant ssh machine_1```
 
 ```vagrant ssh machine_2```
