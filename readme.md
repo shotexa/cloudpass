@@ -14,6 +14,7 @@ machine_2 10.0.0.3
 ```
 In terminal
 ```vagrant ssh machine_1```
+
 ```vagrant ssh machine_2```
 
 Machines will be able to communicate with each other, outside world but not with the host
