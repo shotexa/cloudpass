@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "DEBUG=* node src/index.js",
+    "prod": "npm start"
   },
   "keywords": [
     "cloudpass"
@@ -15,5 +17,8 @@
   "dependencies": {
     "bluebird": "^3.5.2",
     "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "debug": "^4.1.0"
   }
 }

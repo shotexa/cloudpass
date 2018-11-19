@@ -62,7 +62,10 @@
         "no-var": 2,
         "valid-typeof": 2,
         "no-new-symbol": 2,
-        "arrow-parens": 2,
+        "arrow-parens": [
+            2,
+            "as-needed"
+        ],
         "arrow-spacing": 2,
         "brace-style": 2,
         "callback-return": 2,
@@ -81,7 +84,7 @@
         ],
         "curly": 2,
         "default-case": 2,
-        "eqeqeq": 2
+        "eqeqeq": 1
     },
     "env": {
         "browser": true,
