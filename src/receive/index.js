@@ -1,7 +1,7 @@
-const Server = require('./server')
+const serverFactory = require('./server')
 
 
-const server = new Server
+const server = serverFactory()
 server.start()
 
 module.exports = new Promise((resolve, reject) => {

@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
         vb.memory = "1024"
         vb.name = "cloudpass_machine_#{i}"
       end   
-      # machines will only be able to comunicate withing each other but not with the host
+      # machines will only be able to communicate withing each other but not with the host
       machine.vm.network "private_network", ip: "10.0.0.#{i + 1}", virtualbox__intnet: true
     end
   end

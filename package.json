@@ -12,10 +12,11 @@
   "keywords": [
     "cloudpass"
   ],
-  "author": "shota jolbordi",
+  "author": "shota jolbordi <shota.jolbordi@protonmail.com>",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.2",
+    "diskusage": "^0.2.6",
     "ramda": "^0.25.0"
   },
   "devDependencies": {

@@ -82,7 +82,7 @@
             2,
             "self"
         ],
-        "curly": 2,
+        "curly": 0,
         "default-case": 2,
         "eqeqeq": 1
     },
