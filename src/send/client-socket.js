@@ -1,7 +1,7 @@
-const Net = require('net'),
-    EventEmitter = require('events'),
-    { serverPorts } = require('../config'),
-    { debug } = require('../utils')
+const Net = require('net')
+    , EventEmitter = require('events')
+    , { serverPorts } = require('../config')
+    , { debug } = require('../utils')
 
 
 const log = debug(__dirname)

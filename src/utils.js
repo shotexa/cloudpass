@@ -1,6 +1,6 @@
-const Readline = require('readline'),
-    Debug = require('debug'),
-    Config = require('./config')
+const Readline = require('readline')
+    , Debug = require('debug')
+    , Config = require('./config')
 
 const reader = Readline.createInterface(process.stdin, process.stdout)
 
@@ -41,7 +41,7 @@ const oct = (...numbers) => Buffer.from([...numbers])
  */
 const iterToGen = iterable => (function* () {
     for (let v of iterable) yield v
-})
+}())
 
 
 module.exports = {

@@ -1,8 +1,8 @@
-const Net = require('net'),
-    EventEmitter = require('events'),
-    { serverPorts } = require('../config'),
-    { debug, iterToGen } = require('../utils'),
-    serverSocketFactory = require('./server-socket')
+const Net = require('net')
+    , EventEmitter = require('events')
+    , { serverPorts } = require('../config')
+    , { debug, iterToGen } = require('../utils')
+    , serverSocketFactory = require('./server-socket')
 
 
 
@@ -30,26 +30,33 @@ class Server extends EventEmitter {
 
 
     _onError(error) {
-        this[`handle${error.code}`] ?
-            this[`handle${error.code}`].call(this, error) :
+        this[`_handle${error.code}`] ?
+            this[`_handle${error.code}`].call(this, error) :
             this._handleError(error)
     }
 
     _handleEADDRINUSE(error) {
+        log('unable to start server')
+        const tryAddr = this._availablePorts.next()
+        log('attempting to start server on %o', tryAddr)
+        !tryAddr.done
+            ? this.start(tryAddr.value)
+            : this.emit('UNHANDLED_ERROR', new Error('All available ports are busy'))
+
 
     }
 
     _handleError(error) {
-
+        log('UNHANDLED ERROR %O', error)
+        this.emit('UNHANDLED_ERROR', error)
     }
 
 
 
-    start() {
-        log('listening on port %o', serverPorts)
-        //TODO: check if port is in use
-
-        this.server.listen(this._availablePorts.next().value)
+    start(port) {
+        port = port || this._availablePorts.next().value
+        log('attempting to listen on %d', port)
+        this.server.listen(port)
     }
 
 }

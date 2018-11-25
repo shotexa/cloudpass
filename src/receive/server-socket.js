@@ -1,5 +1,5 @@
-const { debug } = require('../utils'),
-    Proto = require('../protocol')
+const { debug } = require('../utils')
+    , Proto = require('../protocol')
 
 
 

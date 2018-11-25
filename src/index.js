@@ -13,5 +13,4 @@ ask('Do you want to send or receive files? [S/R] ')
     .then(action => require(join(__dirname, action)))
     .then(res => log(res))
     .then(process.exit.bind(process, 0))
-    .catch(err => log(err))
-
+    .catch(err => (log(err), process.exit(1)))
