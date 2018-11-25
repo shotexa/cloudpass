@@ -25,13 +25,11 @@ class ServerSocket {
 
 module.exports = function (...args) {
     return new Proxy(new ServerSocket(...args), {
-        // if method in not present, call this method on socket
+        // if method or property in not present on ServerSocket instance, use internal socket object
         get: function (target, name) {
-            return function (...args) {
-                target[name] ?
-                    target.name.call(target, ...args)
-                    : target.socket[name].call(target.socket, ...args)
-            }
+            const host = target[name] ? target : target.socket[name] ? target.socket : null
+            const prop = target[name] || target.socket[name] || undefined
+            return typeof prop === 'function' ? prop.bind(host) : prop
         }
     })
 }

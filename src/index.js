@@ -1,6 +1,7 @@
 global.Promise = require('bluebird')
-const { join } = require('path'),
-    { ask, debug } = require('./utils')
+const { join } = require('path')
+    , { ask, debug } = require('./utils')
+
 
 const log = debug(__dirname)
 

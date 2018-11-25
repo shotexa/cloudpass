@@ -18,13 +18,18 @@ class Server extends EventEmitter {
         this.server.on('connection', this._onConnection.bind(this))
         this.server.on('error', this._onError.bind(this))
         this._availablePorts = iterToGen(serverPorts)
+        this._clients = new Map
+
 
     }
 
     _onConnection(socket) {
-        log('handling socket connection from %o', socket.address())
+        const addr = socket.address()
+        log('handling socket connection from %o', addr)
         const serverSocket = serverSocketFactory(socket)
+        this._clients.set(addr, serverSocket)
         serverSocket.ready()
+
     }
 
 
