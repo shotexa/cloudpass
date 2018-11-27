@@ -1,19 +1,8 @@
-const Net = require('net')
+const clientSocketFactory = require('./client-socket')
 
-const socket = new Net.Socket(null, false, true, true)
-socket.connect('34832', '10.0.0.2', () => {
-    socket.write('testing connection')
-    socket.end()
-    socket.on('data', chunk => console.log(chunk))
+const clientSocket = clientSocketFactory()
 
-})
-
-// const clientSocketFactory = require('./client-socket'),
-//     { ask } = require('../utils')
-
-// const clientSocket = clientSocketFactory()
-
-// clientSocket.connect()
+clientSocket.connect()
 
 
 module.exports = new Promise((resolve, reject) => {
