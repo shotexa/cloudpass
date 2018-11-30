@@ -43,11 +43,20 @@ const iterToGen = iterable => (function* () {
     for (let v of iterable) yield v
 }())
 
+/**
+ * @param {string} data data to display
+ * @returns {void}
+ * 
+ * displays line 
+ */
+const writeLine = data => reader.write(data + '\n')
+
 
 module.exports = {
     ask,
     noop,
     debug,
     oct,
-    iterToGen
+    iterToGen,
+    writeLine
 }

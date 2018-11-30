@@ -13,8 +13,8 @@ class ClientSocket extends EventEmitter {
 
     }
 
-    connect() {
-
+    connect(ip) {
+        if (!Net.isIP(ip.trim())) this.emit('INVALID_IP_ADDRESS')
     }
 }
 
