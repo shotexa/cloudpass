@@ -72,7 +72,7 @@ class ClientSocket extends EventEmitter {
 
 module.exports = function (...args) {
     return new Proxy(new ClientSocket(...args), {
-        // if method or property in not present on ServerSocket instance, use internal socket object
+        // if method or property in not present on ClientSocket instance, use internal socket object
         get: function (target, name) {
             const host = target[name] ? target : target._socket[name] ? target._socket : null
             const prop = target[name] || target._socket[name] || undefined
