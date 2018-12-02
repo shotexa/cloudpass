@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
     "dev": "DEBUG=* node src/index.js",
-    "prod": "npm start"
+    "prod": "npm start",
+    "signal": "node ./scripts/signal-processes.js"
   },
   "keywords": [
     "cloudpass"

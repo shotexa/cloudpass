@@ -1,7 +1,7 @@
 const Net = require('net')
     , EventEmitter = require('events')
     , { serverPorts } = require('../config')
-    , { debug, iterToGen } = require('../utils')
+    , { debug, iterToGen, remoteAddr } = require('../utils')
     , serverSocketFactory = require('./server-socket')
 
 
@@ -14,22 +14,35 @@ class Server extends EventEmitter {
 
     constructor() {
         super()
-        this.server = new Net.Server()
-        this.server.on('connection', this._onConnection.bind(this))
-        this.server.on('error', this._onError.bind(this))
+        this._server = new Net.Server
+        this._server.on('connection', this._onConnection.bind(this))
+        this._server.on('error', this._onError.bind(this))
         this._availablePorts = iterToGen(serverPorts)
         this._clients = new Map
 
 
     }
 
+    close() {
+        this._clients.forEach(sock => sock.end())
+        this._server.close()
+    }
+
+
     _onConnection(socket) {
-        const addr = socket.address()
+        const addr = remoteAddr(socket)
         log('handling socket connection from %o', addr)
         const serverSocket = serverSocketFactory(socket)
+        serverSocket.on('CLOSE', this._socketClosed.bind(this, serverSocket))
         this._clients.set(addr, serverSocket)
-        serverSocket.ready()
 
+    }
+    _socketClosed(serverSocket) {
+        //TODO: if all clients have disconnected, aks user if he still wants to continue listening
+        this._clients.delete(remoteAddr(serverSocket))
+        this._clients.size === 0 && // if there are not clients left
+            !this._server.listening && // and server is not listening
+            this.emit('CLOSE')
     }
 
 
@@ -61,7 +74,7 @@ class Server extends EventEmitter {
     start(port) {
         port = port || this._availablePorts.next().value
         log('attempting to listen on %d', port)
-        this.server.listen(port)
+        this._server.listen(port)
     }
 
 }

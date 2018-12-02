@@ -51,6 +51,14 @@ const iterToGen = iterable => (function* () {
  */
 const writeLine = data => reader.write(data + '\n')
 
+/**
+ * @param {Socket} socket instance of net.socket instance
+ * @returns {object} address 
+ * 
+ * returns remote ip, port and family of the socket
+ */
+const remoteAddr = socket => ({ address: socket.remoteAddress, family: socket.remoteFamily, port: socket.remotePort })
+
 
 module.exports = {
     ask,
@@ -58,5 +66,6 @@ module.exports = {
     debug,
     oct,
     iterToGen,
-    writeLine
+    writeLine,
+    remoteAddr
 }
