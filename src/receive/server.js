@@ -20,7 +20,6 @@ class Server extends EventEmitter {
     this._availablePorts = iterToGen(serverPorts)
     this._clients = new Map
 
-
   }
 
   close() {
@@ -31,7 +30,6 @@ class Server extends EventEmitter {
 
 
 
-
   _onConnection(socket) {
 
     const addr = remoteAddr(socket)
@@ -39,7 +37,10 @@ class Server extends EventEmitter {
     const serverSocket = serverSocketFactory(socket)
     serverSocket.on('CLOSE', this._socketClosed.bind(this, serverSocket))
     this._clients.set(addr, serverSocket)
+    serverSocket.ready()
   }
+
+
   _socketClosed(serverSocket) {
 
     this._clients.delete(remoteAddr(serverSocket))

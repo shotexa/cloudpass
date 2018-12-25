@@ -8,6 +8,9 @@ module.exports = new Promise((resolve, reject) => {
   const clientSocket = clientSocketFactory()
   clientSocket.on('UNHANDLED_ERROR', error => reject(error))
   clientSocket.on('CONNECTION', writeLine.bind(null, 'Connection established...'))
+  clientSocket.on('SERVER_READY', () => {
+    ask('Enter the file path you want to send').then(path => clientSocket.kickOff(path))
+  })
   clientSocket.on('INVALID_IP_ADDRESS', () => {
     ask('Ip address you\'ve entered is invalid, try again ').then(ip => clientSocket.connect(ip))
   })

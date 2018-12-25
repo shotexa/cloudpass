@@ -2,6 +2,7 @@ const Net = require('net')
   , EventEmitter = require('events')
   , { serverPorts } = require('../config')
   , { debug, iterToGen, remoteAddr } = require('../utils')
+  , Proto = require('../protocol')
 
 
 const log = debug(__dirname)
@@ -20,6 +21,12 @@ class ClientSocket extends EventEmitter {
   }
 
   _onData(chunk) {
+    let res = this._parseResponse(chunk)
+    if (res) this.emit(res)
+    else {
+      log('unknown response', res)
+      this.emit('UNHANDLED_ERROR', new Error('unknown response from server'))
+    }
   }
 
   _onEnd() {
@@ -28,7 +35,7 @@ class ClientSocket extends EventEmitter {
   }
 
   _onClose() {
-    log('closing clien  t socket')
+    log('closing client socket')
     this._socket.ended && this.emit('CLOSE')
   }
 
@@ -58,6 +65,11 @@ class ClientSocket extends EventEmitter {
 
   }
 
+  _parseResponse(buffer) {
+    let entry = Object.entries(Proto).find(entry => entry[1].equals(buffer))
+    return !!entry && entry[0]
+  }
+
   connect(ip, port) {
     port = port || this._availablePorts.next().value
     ip = ip.trim()
@@ -68,6 +80,10 @@ class ClientSocket extends EventEmitter {
 
     this._socket.connect(port, ip)
 
+  }
+
+  kickOff(path) {
+    log(path)
   }
 }
 
