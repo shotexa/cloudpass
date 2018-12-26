@@ -1,8 +1,12 @@
 const Readline = require('readline')
-    , Debug = require('debug')
-    , Config = require('./config')
+  , Debug = require('debug')
+  , Config = require('../config')
 
-const reader = Readline.createInterface(process.stdin, process.stdout)
+const reader = Readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+})
 
 /**
  * @param {string} q question to display in terminal
@@ -11,6 +15,8 @@ const reader = Readline.createInterface(process.stdin, process.stdout)
  * displays question
  */
 const ask = ((r, q) => new Promise(resolve => r.question(q, ans => resolve(ans)))).bind(null, reader)
+
+
 
 /**
  * no operation
@@ -40,7 +46,7 @@ const oct = (...numbers) => Buffer.from([...numbers])
  * returns generator that yields iterable values one by one
  */
 const iterToGen = iterable => (function* () {
-    for (let v of iterable) yield v
+  for (const v of iterable) yield v
 }())
 
 /**
@@ -60,12 +66,13 @@ const writeLine = data => reader.write(data + '\n')
 const remoteAddr = socket => ({ address: socket.remoteAddress, family: socket.remoteFamily, port: socket.remotePort })
 
 
+
 module.exports = {
-    ask,
-    noop,
-    debug,
-    oct,
-    iterToGen,
-    writeLine,
-    remoteAddr
+  ask,
+  noop,
+  debug,
+  oct,
+  iterToGen,
+  writeLine,
+  remoteAddr
 }

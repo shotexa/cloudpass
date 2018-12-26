@@ -21,7 +21,7 @@ class ClientSocket extends EventEmitter {
   }
 
   _onData(chunk) {
-    let res = this._parseResponse(chunk)
+    const res = this._parseResponse(chunk)
     if (res) this.emit(res)
     else {
       log('unknown response', res)
@@ -66,7 +66,7 @@ class ClientSocket extends EventEmitter {
   }
 
   _parseResponse(buffer) {
-    let entry = Object.entries(Proto).find(entry => entry[1].equals(buffer))
+    const entry = Object.entries(Proto).find(entry => entry[1].equals(buffer))
     return !!entry && entry[0]
   }
 
@@ -77,7 +77,6 @@ class ClientSocket extends EventEmitter {
       this.emit('INVALID_IP_ADDRESS')
       return
     }
-
     this._socket.connect(port, ip)
 
   }

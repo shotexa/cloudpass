@@ -4,7 +4,7 @@ const serverFactory = require('./server')
 
 module.exports = new Promise((resolve, reject) => {
   const server = serverFactory()
-  server.on('UNHANDLED_ERROR', error => reject(error))
+  server.on('UNHANDLED_ERROR', reject)
   server.on('CLOSE', resolve)
   process.on('SIGINT', server.close.bind(server))
   process.on('SIGTERM', server.close.bind(server))
