@@ -5,13 +5,15 @@ const { join } = require('path')
 
 const log = debug(__dirname)
 
+// Kickoff with initial question
 ask('Do you want to send or receive files? [S/R] ')
   .then(function (ans) {
+    // if answer format is incorrect, ask until correct answer is given, then proceed
     return [...'sr'].indexOf(ans.toLowerCase()) === -1 ? ask('Please enter "S" for send and "R" for receive [S/R] ').then(arguments.callee) : ans
   })
   .then(ans => ans.toLowerCase())
   .then(ans => ({ r: 'receive', s: 'send' }[ans]))
-  .then(action => require(join(__dirname, action)))
+  .then(action => require(join(__dirname, action))) // start either client or server
   .then(res => log(res))
   .then(() => {
     log('successfully exited')
