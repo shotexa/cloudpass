@@ -16,10 +16,21 @@ class ServerSocket extends EventEmitter {
     this._socket.on('data', this._onData.bind(this))
   }
 
+  /**
+   * @returns {void}
+   * 
+   * emitted when socket is closed
+   */
   _onClose() {
     log('closing server socket')
     this.emit('CLOSE')
   }
+
+  /**
+   * @returns {void}
+   * 
+   * emitted when socket is ended
+   */
   _onEnd() {
     log('ending server socket')
   }
@@ -29,6 +40,11 @@ class ServerSocket extends EventEmitter {
   }
 
 
+  /**
+   * @returns {void}
+   * 
+   * sends SERVER_READY package to socket on the other end
+   */
   ready() {
     log('sending SERVER_READY packet to %o', remoteAddr(this._socket))
     this._socket.write(Proto.SERVER_READY)

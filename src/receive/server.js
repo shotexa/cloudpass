@@ -22,33 +22,56 @@ class Server extends EventEmitter {
 
   }
 
+  /**
+   * @returns {void}
+   * 
+   * closes the server and emits close event for an application
+   */
   close() {
-    this._clients.forEach(sock => sock.end())
+    this._clients.forEach(sock => sock.end()) //send FIN package to every connected client
     this._server.close()
+    // if all clients have disconnected and server stopped listening, lose the app
     this._clients.size === 0 && !this._server.listening && this.emit('CLOSE')
   }
 
 
-
+  /**
+   * @param {Net.Socket} socket 
+   * @returns {void}
+   * 
+   * Triggers when client connects to a server
+   */
   _onConnection(socket) {
 
     const addr = remoteAddr(socket)
     log('handling socket connection from %o', addr)
-    const serverSocket = serverSocketFactory(socket)
-    serverSocket.on('CLOSE', this._socketClosed.bind(this, serverSocket))
-    this._clients.set(addr, serverSocket)
-    serverSocket.ready()
+    const serverSocket = serverSocketFactory(socket) // Initialize server-socket instance
+    serverSocket.on('CLOSE', this._socketClosed.bind(this, serverSocket)) // bind CLOSE event
+    this._clients.set(addr, serverSocket) // add client to clients registry
+    serverSocket.ready() // send SERVER_READY package
   }
 
 
+  /** 
+   * @param {ServerSocket} serverSocket 
+   * @returns {void}
+   * 
+   * Triggers when one of the client sockets have closed
+   */
   _socketClosed(serverSocket) {
 
-    this._clients.delete(remoteAddr(serverSocket))
+    this._clients.delete(remoteAddr(serverSocket)) // Remove from clients entry
+    // if all clients have disconnected and server stopped listening, lose the app
     this._clients.size === 0 && !this._server.listening && this.emit('CLOSE')
   }
 
 
-
+  /**
+   * @param {Error} error 
+   * @returns {void}
+   * 
+   * delegates server error handling to dedicated handler based or error code
+   */
   _onError(error) {
 
     this[`_handle${error.code}`] ?
@@ -56,11 +79,18 @@ class Server extends EventEmitter {
       this._handleError(error)
   }
 
+  /**
+   * @param {Error} error 
+   * @returns {void}
+   * 
+   * Handles EADDRINUSE error on server
+   */
   _handleEADDRINUSE(error) {
 
     log('unable to start server')
     const tryAddr = this._availablePorts.next()
     log('attempting to start server on %o', tryAddr)
+    // if non of available ports are free, close application with an error
     !tryAddr.done
       ? this.start(tryAddr.value)
       : this.emit('UNHANDLED_ERROR', new Error('All available ports are busy'))
@@ -68,6 +98,12 @@ class Server extends EventEmitter {
 
   }
 
+  /**
+   * @param {Error} error 
+   * @returns {void}
+   * 
+   * handles server error in case dedicated handler not found for specific error code
+   */
   _handleError(error) {
 
     log('UNHANDLED ERROR %O', error)
@@ -75,7 +111,12 @@ class Server extends EventEmitter {
   }
 
 
-
+  /**
+   * @param {Number | String<Number>} port 
+   * @returns {void}
+   * 
+   * starts server
+   */
   start(port) {
     port = port || this._availablePorts.next().value
     log('attempting to listen on %d', port)

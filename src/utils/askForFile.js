@@ -13,6 +13,7 @@ const reader = Readline.createInterface({
       matchStr = line.endsWith('/') ? realPath : path.basename(realPath),
       dataFn = line.endsWith('/') ? data => data : filter(x => x.startsWith(matchStr))
 
+    // Search files in provided directory and return found files for autocompletion  
     fs.readdir(searchIn, (err, data) => cb(err, [dataFn(data), matchStr]))
   }
 })

@@ -9,15 +9,18 @@ module.exports = new Promise((resolve, reject) => {
   clientSocket.on('UNHANDLED_ERROR', reject)
   clientSocket.on('CONNECTION', writeLine.bind(null, 'Connection established...'))
   clientSocket.on('SERVER_READY', () => {
+    // Kickoff file sending process once server send SERVER_READY package
     askForFile('Please enter file name > ').then(file => clientSocket.kickOff(file))
   })
   clientSocket.on('INVALID_IP_ADDRESS', () => {
+    // Ask for ip address until format ip is valid
     ask('Ip address you\'ve entered is invalid, try again ').then(ip => clientSocket.connect(ip))
   })
   ask('Enter the IP address of the receiver computer ').then(ip => clientSocket.connect(ip))
 
   clientSocket.on('CLOSE', resolve)
 
+  // send FIN package if process is terminated to notify server that socket is not available on this end
   process.on('SIGINT', clientSocket.end.bind(clientSocket))
   process.on('SIGTERM', clientSocket.end.bind(clientSocket))
   process.on('SIGQUIT', clientSocket.end.bind(clientSocket))
