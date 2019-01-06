@@ -142,7 +142,7 @@ class ClientSocket extends EventEmitter {
   }
 
   kickOff(path) {
-    log(path)
+
   }
 }
 

@@ -1,4 +1,5 @@
 const clientSocketFactory = require('./client-socket')
+  , fileFactory = require('../file')
   , { ask, debug, writeLine } = require('../utils')
   , askForFile = require('../utils/askForFile')
 
@@ -9,14 +10,19 @@ module.exports = new Promise((resolve, reject) => {
   clientSocket.on('UNHANDLED_ERROR', reject)
   clientSocket.on('CONNECTION', writeLine.bind(null, 'Connection established...'))
   clientSocket.on('SERVER_READY', () => {
-    // Kickoff file sending process once server send SERVER_READY package
-    askForFile('Please enter file name > ').then(file => clientSocket.kickOff(file))
+    // Kickoff file sending process once server sends SERVER_READY package
+    askForFile('Please enter the file name > ')
+      .then(fileFactory)
+      .then(file => {
+
+      })
   })
+  const connect = clientSocket.connect.bind(clientSocket)
   clientSocket.on('INVALID_IP_ADDRESS', () => {
-    // Ask for ip address until format ip is valid
-    ask('Ip address you\'ve entered is invalid, try again ').then(ip => clientSocket.connect(ip))
+    // Ask for ip address until it's in valid format
+    ask('Ip address you\'ve entered is invalid, try again ').then(connect)
   })
-  ask('Enter the IP address of the receiver computer ').then(ip => clientSocket.connect(ip))
+  ask('Enter the IP address of the receiver computer ').then(connect)
 
   clientSocket.on('CLOSE', resolve)
 
